@@ -1,0 +1,12 @@
+version: "3.9"
+
+services:
+  auth-service:
+    build: ./auth_service             # брать Dockerfile из текущей папки
+    container_name: auth-service
+
+    ports:
+      - "5000:5000"       # ПК:контейнер
+
+    volumes:
+      - ./auth_service:/app       # синхронизация файлов

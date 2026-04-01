@@ -1,0 +1,3 @@
+instance/
+auth_service/__pycache__
+auth_service/instance/
