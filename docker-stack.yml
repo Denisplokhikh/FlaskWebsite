@@ -1,0 +1,48 @@
+version: "3.9"
+
+services:
+  auth-service:
+    build: ./auth_service
+    image: flaskmicroservice-auth-service:latest
+    ports:
+      - "5000:5000"
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks:
+      - backend
+
+  publication-service:
+    build: ./publication_service
+    image: flaskmicroservice-post-service:latest
+    ports:
+      - "5002:5002"
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks:
+      - backend
+
+  nginx:
+    image: nginx:stable-alpine
+    ports:
+      - "80:80"
+    configs:
+      - source: nginx_conf
+        target: /etc/nginx/nginx.conf
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: overlay
+
+configs:
+  nginx_conf:
+    file: ./nginx.conf

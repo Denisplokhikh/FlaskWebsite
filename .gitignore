@@ -1,3 +1,5 @@
 instance/
 auth_service/__pycache__
 auth_service/instance/
+publication_service/__pycache__
+publication_service/instance/

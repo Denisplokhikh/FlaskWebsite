@@ -3,21 +3,14 @@ version: "3.9"
 services:
   auth-service:
     build: ./auth_service
-    container_name: auth-service
-
     ports:
       - "5000:5000"
-
     volumes:
       - ./auth_service:/app
 
-
   post-service:
     build: ./publication_service
-    container_name: publication-service
-
     ports:
       - "5002:5002"
-
     volumes:
       - ./publication_service:/app
