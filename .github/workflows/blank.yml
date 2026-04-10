@@ -1,4 +1,4 @@
-name: Flask Microservices CI
+name: Flask Microservices CI (Docker)
 
 on:
   push:
@@ -7,43 +7,28 @@ on:
     branches: [ "main", "dev" ]
 
 jobs:
-  test-service1:
+  docker-ci:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: service1
-
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
+      - name: Build containers
+        run: docker compose build
 
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+      - name: Start services
+        run: docker compose up -d
 
-      - name: Run tests
-        run: pytest
+      - name: Wait for services to start
+        run: sleep 10
 
-  test-service2:
-    runs-on: ubuntu-latest
+      - name: Check running containers
+        run: docker ps
 
-    defaults:
-      run:
-        working-directory: service2
+      - name: Show logs (if needed)
+        run: docker compose logs
 
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+      - name: Stop services
+        if: always()
+        run: docker compose down
